@@ -10,24 +10,27 @@ import os
 import copy
 from datetime import datetime
 from dotenv import load_dotenv
+import openai
 
 # Load environment variables
 load_dotenv()
 
 # Initialize OpenAI client if API key exists
 try:
-    from openai import OpenAI
+    import openai
     api_key = os.getenv("OPENAI_API_KEY")
     if api_key:
-        client = OpenAI(api_key=api_key)
+        openai.api_key = api_key
+        client = openai  # Just use the module directly
         print("OpenAI client initialized successfully.")
     else:
         print("No OpenAI API key found. OCT analysis will be simulated.")
         client = None
 except ImportError:
     print("OpenAI package not installed. OCT analysis will be simulated.")
-    OpenAI = None
     client = None
+
+
     
 def create_eye_section(side):
     """Create the eye section for OCT analysis results."""
