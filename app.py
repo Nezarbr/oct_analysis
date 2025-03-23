@@ -3,6 +3,22 @@
 """
 Main application module for OCT Master.
 """
+
+try:
+    print("Attempting to import OpenAI...")
+    import openai
+    print("OpenAI imported successfully")
+    
+    api_key = os.getenv("OPENAI_API_KEY")
+    print(f"API key found: {'Yes' if api_key else 'No'}")
+    print(f"First few characters of API key: {api_key[:4]}***" if api_key else "No API key")
+    
+    # Continue with the rest of your code
+except ImportError as e:
+    print(f"Import error: {e}")
+
+
+
 import dash
 from dash import html, dcc, Input, Output, State, callback, no_update
 import dash_bootstrap_components as dbc
