@@ -4,18 +4,7 @@
 Main application module for OCT Master.
 """
 
-try:
-    print("Attempting to import OpenAI...")
-    import openai
-    print("OpenAI imported successfully")
-    
-    api_key = os.getenv("OPENAI_API_KEY")
-    print(f"API key found: {'Yes' if api_key else 'No'}")
-    print(f"First few characters of API key: {api_key[:4]}***" if api_key else "No API key")
-    
-    # Continue with the rest of your code
-except ImportError as e:
-    print(f"Import error: {e}")
+
 
 
 
@@ -32,6 +21,19 @@ from models import load_users, load_patients
 from auth import setup_login_manager, login_layout, register_auth_callbacks, require_login
 from patient_management import dashboard_layout, patient_detail_layout, register_patient_callbacks
 from oct_analysis import register_oct_analysis_callbacks
+
+try:
+    print("Attempting to import OpenAI...")
+    import openai
+    print("OpenAI imported successfully")
+    
+    api_key = os.getenv("OPENAI_API_KEY")
+    print(f"API key found: {'Yes' if api_key else 'No'}")
+    print(f"First few characters of API key: {api_key[:4]}***" if api_key else "No API key")
+    
+    # Continue with the rest of your code
+except ImportError as e:
+    print(f"Import error: {e}")
 
 # Initialize server and app
 server = flask.Flask(__name__)
