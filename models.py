@@ -10,14 +10,14 @@ from datetime import datetime
 # Default users that will always be available
 DEFAULT_USERS = [
     {
-        "identifiant": "nezar",
-        "nom": "Dr Nezar",
+        "identifiant": "Elamri_Ayoub",
+        "nom": "Dr Elamri Ayoub",
         "password_hash": generate_password_hash("password123", method='pbkdf2:sha256'),
         "role": "doctor"
     },
     {
-        "identifiant": "sarah",
-        "nom": "Dr Sarah",
+        "identifiant": "Nezar",
+        "nom": "Eng Nezar",
         "password_hash": generate_password_hash("password123", method='pbkdf2:sha256'),
         "role": "doctor"
     },
@@ -40,7 +40,7 @@ DEFAULT_PATIENTS = [
         "type_ivt": "anti_vegf",
         "nb_injections": 3,
         "molecule": "Aflibercept",
-        "doctor": "nezar"
+        "doctor": "Elamri_Ayoub"
     },
     {
         "nom": "Benkirane",
@@ -51,7 +51,7 @@ DEFAULT_PATIENTS = [
         "type_ivt": "corticoid",
         "nb_injections": 2,
         "molecule": "Dexaméthasone",
-        "doctor": "nezar"
+        "doctor": "Elamri_Ayoub"
     },
     {
         "nom": "Tazi",
@@ -62,7 +62,7 @@ DEFAULT_PATIENTS = [
         "type_ivt": "",
         "nb_injections": 0,
         "molecule": "",
-        "doctor": "sarah"
+        "doctor": "Elamri_Ayoub"
     },
     {
         "nom": "Alaoui",
@@ -73,7 +73,7 @@ DEFAULT_PATIENTS = [
         "type_ivt": "anti_vegf",
         "nb_injections": 4,
         "molecule": "Ranibizumab",
-        "doctor": "nezar"
+        "doctor": "Elamri_Ayoub"
     },
     {
         "nom": "Idrissi",
@@ -84,7 +84,7 @@ DEFAULT_PATIENTS = [
         "type_ivt": "anti_vegf",
         "nb_injections": 5,
         "molecule": "Bevacizumab",
-        "doctor": "sarah"
+        "doctor": "Elamri_Ayoub"
     }
 ]
 
