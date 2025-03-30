@@ -1,6 +1,6 @@
 # auth.py
 """
-Module for authentication and login functionality for OCT Master application.
+Module for authentication and login functionality for DeepOCT application.
 """
 from dash import html, dcc, Input, Output, State, callback, no_update
 import dash_bootstrap_components as dbc
@@ -73,7 +73,7 @@ def login_layout():
                 
                 # App title and subtitle
                 html.Div([
-                    html.H1("OCT Master", className="text-primary fw-bold"),
+                    html.H1("DeepOCT", className="text-primary fw-bold"),
                     html.H5("Plateforme d'analyse d'images OCT maculaire", 
                            className="text-muted mb-4"),
                 ], className="text-center mb-4"),
@@ -129,7 +129,7 @@ def login_layout():
                 
                 # Footer
                 html.Footer([
-                    html.P("© 2025 OCT Master. Tous droits réservés.", 
+                    html.P("© 2025 DeepOCT. Tous droits réservés.", 
                           className="text-center text-muted mt-4 small")
                 ])
             ], className="login-card")
