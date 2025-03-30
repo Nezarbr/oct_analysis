@@ -16,17 +16,18 @@ load_dotenv()
 
 # Initialize OpenAI client if API key exists
 try:
-    import openai
+    from openai import OpenAI
     api_key = os.getenv("OPENAI_API_KEY")
     if api_key:
-        openai.api_key = api_key
+        client = OpenAI(api_key=api_key)
         print("OpenAI client initialized successfully.")
     else:
         print("No OpenAI API key found. OCT analysis will use default values.")
-        openai = None
+        client = None
 except ImportError:
     print("OpenAI package not installed. OCT analysis will use default values.")
-    openai = None
+    OpenAI = None
+    client = None
     
 def create_eye_section(side):
     """Create the eye section for OCT analysis results."""
