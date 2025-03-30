@@ -1,7 +1,7 @@
 # patient_management.py
 
 """
-Module for patient management functionality for OCT Master application.
+Module for patient management functionality for DeepOCT application.
 """
 from dash import html, dcc, Input, Output, State, callback, no_update, ALL, MATCH, ctx
 import dash_bootstrap_components as dbc
@@ -21,7 +21,7 @@ def navbar():
             html.A(
                 dbc.Row([
                     dbc.Col(html.Img(src="/assets/oct_logo.png", height="40px"), width="auto"),
-                    dbc.Col(dbc.NavbarBrand("OCT Master", className="ms-2"), width="auto"),
+                    dbc.Col(dbc.NavbarBrand("DeepOCT", className="ms-2"), width="auto"),
                 ], align="center", className="g-0"),
                 href="/dashboard",
                 style={"textDecoration": "none"},
@@ -208,6 +208,11 @@ def dashboard_layout():
         ], fluid=True)
     ])
 
+# Update to patient_detail_layout in patient_management.py
+
+# Update the import statement
+from oct_analysis import create_eye_section, create_report_section
+
 def patient_detail_layout(patient_id):
     """Create the patient detail layout with OCT analysis capabilities."""
     from models import get_patient_by_id
@@ -297,7 +302,7 @@ def patient_detail_layout(patient_id):
                                     ),
                                     html.Div(id='output-image-upload', className="mt-3"),
                                     dbc.Button(
-                                        "Analyser avec OCT Master",
+                                        "Analyser avec DeepOCT",
                                         id="analyze-button",
                                         color="success",
                                         size="lg",
@@ -333,6 +338,11 @@ def patient_detail_layout(patient_id):
                                         
                                         # Right Eye
                                         dbc.Col(create_eye_section("Right"), md=6, className="mb-4"),
+                                        
+                                        # Report Section
+                                        dbc.Col([
+                                            create_report_section()
+                                        ], width=12),
                                         
                                         # Save Analysis Button
                                         dbc.Col([
