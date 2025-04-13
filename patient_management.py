@@ -334,10 +334,10 @@ def patient_detail_layout(patient_id):
                                         ], width=12),
                                         
                                         # Right Eye (appears on the left side of UI)
-                                        dbc.Col(create_eye_section("Left"), md=6, className="mb-4"),
+                                        dbc.Col(create_eye_section("right"), md=6, className="mb-4"),
                                         
                                         # Left Eye (appears on the right side of UI)
-                                        dbc.Col(create_eye_section("Right"), md=6, className="mb-4"),
+                                        dbc.Col(create_eye_section("left"), md=6, className="mb-4"),
                                         
                                         # Report Section
                                         dbc.Col([
