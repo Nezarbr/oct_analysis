@@ -401,7 +401,7 @@ if __name__ == '__main__':
     load_patients()
     
     # Get port from environment variable or use default
-    port = int(os.environ.get('PORT', 8005))
+    port = int(os.environ.get('PORT', 8022))
     
     # Run the server
     app.run(
