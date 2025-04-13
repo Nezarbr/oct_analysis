@@ -28,10 +28,12 @@ except ImportError:
     print("OpenAI package not installed. OCT analysis will use default values.")
     OpenAI = None
     client = None
-    
+
 def create_eye_section(side):
     """Create the eye section for OCT analysis results."""
-    side_text = "Œil Gauche" if side.lower() == "left" else "Œil Droit"
+    # Swap eye text display (Left position shows Right eye and vice versa)
+    side_text = "Œil Droit" if side.lower() == "left" else "Œil Gauche"
+    
     return dbc.Card([
         dbc.CardHeader(html.H3(side_text, className="text-primary")),
         dbc.CardBody([
@@ -79,7 +81,7 @@ def create_eye_section(side):
             ], className="parameter-group"),
 
             html.Div([
-                html.H5("Processus Rétiniens de Pontage", className="text-secondary"),
+                html.H5("Ponts Rétiniens", className="text-secondary"),
                 dcc.RadioItems(
                     options=['Présent', 'Absent'],
                     id=f'briding-{side.lower()}',
@@ -260,6 +262,10 @@ Pronostic:
 - sur la récupération anatomique, ou visuelle en pourcentage (donner un pourcentage approximatif)
 Je voudrai que tu me saisis des information correcte en te basant sur la présence/absence de certain biomarqueur qui sont determinant dans la récupération visuelle, tu peux te baser sur les derniers articles et recommandations sur le web pour me donner une réponse juste, et citer des references et des etudes pour appuyer la fiabilité de tes chiffres
 
+Rappel important: Dans l'analyse OCT:
+- OD (œil droit) correspond à ce qui était présenté dans la partie gauche de l'image
+- OG (œil gauche) correspond à ce qui était présenté dans la partie droite de l'image
+
 Données pour l'OD (œil droit):
 {json.dumps(analysis_data["right_eye"], indent=2, ensure_ascii=False)}
 
@@ -347,7 +353,7 @@ a l'OD : tu précise les elements suivant sous forme de paragraphe très bref:
 - Si présence d'un oèdeme (epaisseur maculaire centrale augmentée) ou présence de logette d'oedeme
 - Si effectivement il y'a un oedeme on cite les biomarqueur présent , puis les biomarqueur absent
 - Si absence d'oèdeme (epaisseur normale et aucune logette detecté) on dit absence d'oèdeme. pas besoin de rajouter la presence/absence des biomarqueurs
-- N'oublie pas d'inclure le statut des Processus Rétiniens de Pontage (briding) et du Décollement Séreux Rétinien dans ton analyse
+- N'oublie pas d'inclure le statut des Ponts Rétiniens (bridging) et du Décollement Séreux Rétinien dans ton analyse
 A L'OG : meme chose
 
 Données pour l'OD:
@@ -357,7 +363,7 @@ Données pour l'OG:
 {json.dumps(report_data["left_eye"], indent=2, ensure_ascii=False)}
 
 Note: Kyste intrarétinien correspond à la présence de logettes d'œdème maculaire.
-Note: Inclure également les informations sur le Processus Rétiniens de Pontage (briding) et le Décollement Séreux Rétinien si présents.
+Note: Inclure également les informations sur les Ponts Rétiniens (bridging) et le Décollement Séreux Rétinien si présents.
 """
 
     try:
@@ -400,6 +406,10 @@ def analyze_with_gpt(image_base64):
     prompt = """Je suis ophtalmologue et j'ai besoin que tu analyses cette image OCT maculaire. Fournis-moi une réponse JSON structurée uniquement, sans texte explicatif avant ou après.
 
 Pour chaque œil (OD et OG), analyse les biomarqueurs suivants et retourne le résultat au format JSON :
+
+IMPORTANT: Dans l'image OCT fournie:
+- La partie GAUCHE de l'image correspond à l'ŒIL DROIT (OD)
+- La partie DROITE de l'image correspond à l'ŒIL GAUCHE (OG)
 
 1. DRIL (Désorganisation des couches rétiniennes internes)
    - Présence/absence
@@ -446,7 +456,9 @@ POINTS IMPORTANTS:
 - Éviter les surinterprétations
 - Pour les kystes, ne les mentionner que s'ils sont clairement identifiables
 - Rester objectif et précis dans les mesures
-- Tu n'as pas besoin d'évaluer le Décollement Séreux Rétinien ni les Processus Rétiniens de Pontage, ces évaluations seront faites par l'ophtalmologue
+- Tu n'as pas besoin d'évaluer le Décollement Séreux Rétinien ni les Ponts Rétiniens, ces évaluations seront faites par l'ophtalmologue
+
+RAPPEL: Partie GAUCHE de l'image = ŒIL DROIT (right_eye), Partie DROITE de l'image = ŒIL GAUCHE (left_eye)
 
 RETOURNER UNIQUEMENT UN OBJET JSON VALIDE AVEC LA STRUCTURE SUIVANTE:
 
@@ -744,6 +756,10 @@ def register_oct_analysis_callbacks(app):
         image_base64 = encode_image_contents(contents)
         raw_response = analyze_with_gpt(image_base64)
         analysis = process_gpt_response(raw_response)
+
+        temp = analysis["left_eye"]
+        analysis["left_eye"] = analysis["right_eye"]
+        analysis["right_eye"] = temp
 
         # When creating results array, explicitly use the current briding and decollement values
         results = []
