@@ -32,7 +32,7 @@ except ImportError:
 def create_eye_section(side):
     """Create the eye section for OCT analysis results."""
     # Swap eye text display (Left position shows Right eye and vice versa)
-    side_text = "Œil Droit" if side.lower() == "left" else "Œil Gauche"
+    side_text = "Œil Droit" if side.lower() == "right" else "Œil Gauche"
     
     return dbc.Card([
         dbc.CardHeader(html.H3(side_text, className="text-primary")),
@@ -405,11 +405,15 @@ def analyze_with_gpt(image_base64):
     
     prompt = """Je suis ophtalmologue et j'ai besoin que tu analyses cette image OCT maculaire. Fournis-moi une réponse JSON structurée uniquement, sans texte explicatif avant ou après.
 
-Pour chaque œil (OD et OG), analyse les biomarqueurs suivants et retourne le résultat au format JSON :
+TRÈS IMPORTANT - INSTRUCTIONS DE MAPPING:
+- L'image OCT est divisée en DEUX PARTIES: GAUCHE et DROITE
+- La partie GAUCHE de l'image (côté gauche) correspond à l'ŒIL DROIT (OD) du patient dans l'oct donné
+- La partie DROITE de l'image (côté droit) correspond à l'ŒIL GAUCHE (OG) du patient dans l'oct donné
+- Dans ta réponse JSON: 
+  * Les données de l'ŒIL DROIT (partie GAUCHE de l'image) doivent être placées sous "right_eye"
+  * Les données de l'ŒIL GAUCHE (partie DROITE de l'image) doivent être placées sous "left_eye"
 
-IMPORTANT: Dans l'image OCT fournie:
-- La partie GAUCHE de l'image correspond à l'ŒIL DROIT (OD)
-- La partie DROITE de l'image correspond à l'ŒIL GAUCHE (OG)
+Pour chaque œil (OD et OG), analyse les biomarqueurs suivants et retourne le résultat au format JSON :
 
 1. DRIL (Désorganisation des couches rétiniennes internes)
    - Présence/absence
@@ -458,7 +462,9 @@ POINTS IMPORTANTS:
 - Rester objectif et précis dans les mesures
 - Tu n'as pas besoin d'évaluer le Décollement Séreux Rétinien ni les Ponts Rétiniens, ces évaluations seront faites par l'ophtalmologue
 
-RAPPEL: Partie GAUCHE de l'image = ŒIL DROIT (right_eye), Partie DROITE de l'image = ŒIL GAUCHE (left_eye)
+RAPPEL FINAL IMPORTANT:
+- "right_eye" dans le JSON = ŒIL DROIT = partie GAUCHE de l'image 
+- "left_eye" dans le JSON = ŒIL GAUCHE = partie DROITE de l'image
 
 RETOURNER UNIQUEMENT UN OBJET JSON VALIDE AVEC LA STRUCTURE SUIVANTE:
 
@@ -757,9 +763,6 @@ def register_oct_analysis_callbacks(app):
         raw_response = analyze_with_gpt(image_base64)
         analysis = process_gpt_response(raw_response)
 
-        temp = analysis["left_eye"]
-        analysis["left_eye"] = analysis["right_eye"]
-        analysis["right_eye"] = temp
 
         # When creating results array, explicitly use the current briding and decollement values
         results = []
