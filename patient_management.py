@@ -333,10 +333,10 @@ def patient_detail_layout(patient_id):
                                             html.H4("Biomarqueurs", className="text-primary mb-3 mt-4"),
                                         ], width=12),
                                         
-                                        # Left Eye
+                                        # Right Eye (appears on the left side of UI)
                                         dbc.Col(create_eye_section("Left"), md=6, className="mb-4"),
                                         
-                                        # Right Eye
+                                        # Left Eye (appears on the right side of UI)
                                         dbc.Col(create_eye_section("Right"), md=6, className="mb-4"),
                                         
                                         # Report Section
